@@ -14,7 +14,7 @@ export default function DashboardPage() {
   // Fetch the resumes when the page loads
   const fetchResumes = async () => {
     try {
-      const { data } = await axios.get("/api/resumes");
+      const { data } = await axios.get("/api/resume");
       setResumes(data);
     } catch (error) {
       console.error("Failed to fetch resumes", error);
@@ -32,7 +32,7 @@ export default function DashboardPage() {
   // Function to create a new blank resume
   const createResume = async () => {
     try {
-      const { data } = await axios.post("/api/resumes", { title: "My New Resume" });
+      const { data } = await axios.post("/api/resume", { title: "My New Resume" });
       router.push(`/resume/${data._id}`); // Redirect directly to the editor
     } catch (error) {
       console.error("Failed to create resume", error);
@@ -43,7 +43,7 @@ export default function DashboardPage() {
   const deleteResume = async (id: string) => {
     if (!confirm("Are you sure you want to delete this resume?")) return;
     try {
-      await axios.delete(`/api/resumes/${id}`);
+      await axios.delete(`/api/resume/${id}`);
       fetchResumes(); // Refresh the list
     } catch (error) {
       console.error("Failed to delete resume", error);

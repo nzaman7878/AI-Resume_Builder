@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,11 +11,12 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FieldValues) => {
     try {
       setError("");
       await axios.post("/api/auth/login", data);
-      router.push("/dashboard"); // Redirect to dashboard on success
+      router.push("/dashboard");
+      router.refresh(); // Refresh to update Header state
     } catch (err: any) {
       setError(err.response?.data?.error || "Invalid email or password");
     }
@@ -35,8 +36,9 @@ export default function LoginPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
               <input
+                id="email"
                 type="email"
                 {...register("email", { required: true })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -45,8 +47,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
               <input
+                id="password"
                 type="password"
                 {...register("password", { required: true })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -74,4 +77,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+}

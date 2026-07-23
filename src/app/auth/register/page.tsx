@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,11 +11,11 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FieldValues) => {
     try {
       setError("");
       await axios.post("/api/auth/register", data);
-      router.push("/auth/login"); // Redirect to login on success
+      router.push("/auth/login");
     } catch (err: any) {
       setError(err.response?.data?.error || "An error occurred");
     }
@@ -35,8 +35,9 @@ export default function RegisterPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
               <input
+                id="name"
                 {...register("name", { required: true })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
@@ -44,8 +45,9 @@ export default function RegisterPage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
               <input
+                id="email"
                 type="email"
                 {...register("email", { required: true })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -54,8 +56,9 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
               <input
+                id="password"
                 type="password"
                 {...register("password", { required: true, minLength: 6 })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -83,4 +86,4 @@ export default function RegisterPage() {
       </div>
     </div>
   );
-}
+}
