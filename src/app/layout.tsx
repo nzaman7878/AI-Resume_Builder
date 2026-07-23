@@ -30,7 +30,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
-        <Header />
+        {/* We add print:hidden here so the navbar doesn't print on the PDF! */}
+        <div className="print:hidden">
+          <Header />
+        </div>
         <main className="flex-1 flex flex-col">
           {children}
         </main>

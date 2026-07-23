@@ -4,19 +4,18 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { Save, ArrowLeft } from "lucide-react";
+import { Save, ArrowLeft, Download } from "lucide-react";
 import Link from "next/link";
 
 export default function ResumeEditor() {
-  const [generating, setGenerating] = useState(false);
-
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
-  // Initialize react-hook-form
-   const { register, handleSubmit, reset, watch } =  useForm({
+  // Initialize react-hook-form with setValue
+  const { register, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
       personalInfo: { fullName: "", email: "", phone: "", location: "" },
@@ -24,20 +23,16 @@ export default function ResumeEditor() {
     }
   });
 
-  // 'watch' gives us the live values of the form as the user types
   const liveData = watch();
 
-  // Fetch the existing resume data
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        // params.id is the ID from the URL (e.g. /resume/12345)
         const { data } = await axios.get(`/api/resumes/${params.id}`);
-        // Populate the form with the data from the database
         reset(data);
       } catch (error) {
         console.error("Failed to load resume", error);
-        router.push("/dashboard"); // Go back if not found
+        router.push("/dashboard");
       } finally {
         setLoading(false);
       }
@@ -45,7 +40,6 @@ export default function ResumeEditor() {
     fetchResume();
   }, [params.id, reset, router]);
 
-  // Handle saving to the database
   const onSubmit = async (formData: any) => {
     setSaving(true);
     try {
@@ -59,10 +53,7 @@ export default function ResumeEditor() {
     }
   };
 
-  if (loading) return <div className="text-center mt-20 font-bold">Loading Editor...</div>;
-
-    const generateAISummary = async () => {
-    // Get whatever is currently typed in the summary box
+  const generateAISummary = async () => {
     const currentSummary = liveData.summary;
     if (!currentSummary) {
       alert("Please write a rough draft first!");
@@ -72,7 +63,6 @@ export default function ResumeEditor() {
     setGenerating(true);
     try {
       const { data } = await axios.post("/api/ai/generate-summary", { draft: currentSummary });
-      // Tell react-hook-form to update the summary field with the AI response
       setValue("summary", data.summary);
     } catch (error) {
       console.error("AI failed", error);
@@ -82,26 +72,38 @@ export default function ResumeEditor() {
     }
   };
 
+  if (loading) return <div className="text-center mt-20 font-bold">Loading Editor...</div>;
+
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
-      {/* LEFT COLUMN: THE FORM */}
-      <div className="w-1/2 flex flex-col bg-white border-r shadow-lg overflow-y-auto">
+      
+      {/* LEFT COLUMN: THE FORM (Hidden when printing via print:hidden) */}
+      <div className="w-1/2 flex flex-col bg-white border-r shadow-lg overflow-y-auto print:hidden">
         <div className="p-4 border-b flex justify-between items-center bg-gray-50 sticky top-0 z-10">
-          <Link href="/dashboard" className="flex items-center text-gray-600 hover:text-indigo-600">
+          <Link href="/dashboard" className="flex items-center text-gray-600 hover:text-indigo-600 font-medium">
             <ArrowLeft size={16} className="mr-1" /> Dashboard
           </Link>
-          <button 
-            onClick={handleSubmit(onSubmit)}
-            disabled={saving}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:bg-indigo-400"
-          >
-            <Save size={16} />
-            {saving ? "Saving..." : "Save Resume"}
-          </button>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 font-medium transition"
+            >
+              <Download size={16} />
+              PDF
+            </button>
+            <button 
+              onClick={handleSubmit(onSubmit)}
+              disabled={saving}
+              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:bg-indigo-400 font-medium transition"
+            >
+              <Save size={16} />
+              {saving ? "Saving..." : "Save"}
+            </button>
+          </div>
         </div>
 
         <div className="p-8 space-y-8">
-          {/* Document Title */}
           <div>
             <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Document Title</label>
             <input 
@@ -113,7 +115,6 @@ export default function ResumeEditor() {
 
           <hr />
 
-          {/* Personal Info */}
           <div>
             <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">Personal Details</label>
             <div className="grid grid-cols-2 gap-4">
@@ -138,8 +139,6 @@ export default function ResumeEditor() {
 
           <hr />
 
-          {/* Professional Summary */}
-                    {/* Professional Summary */}
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Professional Summary</label>
@@ -147,7 +146,7 @@ export default function ResumeEditor() {
                 type="button"
                 onClick={generateAISummary}
                 disabled={generating}
-                className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 font-bold disabled:opacity-50"
+                className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 font-bold disabled:opacity-50 transition"
               >
                 {generating ? "✨ Enhancing..." : "✨ Enhance with AI"}
               </button>
@@ -159,20 +158,14 @@ export default function ResumeEditor() {
               placeholder="Briefly describe your professional background, or write a rough draft and click 'Enhance with AI'!"
             />
           </div>
-          
-          {/* NOTE: You can add Experience and Education sections here later! */}
-          <div className="text-sm text-gray-400 italic mt-8 text-center">
-            (You can add form inputs for Experience and Education here)
-          </div>
         </div>
       </div>
 
-      {/* RIGHT COLUMN: THE LIVE PREVIEW */}
-      <div className="w-1/2 p-8 overflow-y-auto bg-gray-200 flex justify-center">
-        {/* This represents the physical A4 paper */}
+      {/* RIGHT COLUMN: THE LIVE PREVIEW (Takes up full screen when printing) */}
+      <div className="w-1/2 p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0">
+        
         <div className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:p-0">
           
-          {/* Render the watched data! */}
           <div className="border-b-2 border-gray-800 pb-4 mb-4 text-center">
             <h1 className="text-4xl font-serif text-gray-900 tracking-tight">
               {liveData?.personalInfo?.fullName || "Your Name"}
@@ -195,7 +188,6 @@ export default function ResumeEditor() {
             </div>
           )}
 
-          {/* Placeholder for Experience and Education in the preview */}
           <div className="mb-6 opacity-30">
             <h2 className="text-lg font-bold text-gray-800 uppercase tracking-wider mb-2 border-b border-gray-300 pb-1">Experience</h2>
             <div className="mt-2">
@@ -211,6 +203,7 @@ export default function ResumeEditor() {
 
         </div>
       </div>
+
     </div>
   );
 }
