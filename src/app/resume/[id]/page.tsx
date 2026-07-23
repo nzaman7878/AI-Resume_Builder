@@ -8,13 +8,15 @@ import { Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function ResumeEditor() {
+  const [generating, setGenerating] = useState(false);
+
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   // Initialize react-hook-form
-  const { register, handleSubmit, reset, watch } = useForm({
+   const { register, handleSubmit, reset, watch } =  useForm({
     defaultValues: {
       title: "",
       personalInfo: { fullName: "", email: "", phone: "", location: "" },
@@ -58,6 +60,27 @@ export default function ResumeEditor() {
   };
 
   if (loading) return <div className="text-center mt-20 font-bold">Loading Editor...</div>;
+
+    const generateAISummary = async () => {
+    // Get whatever is currently typed in the summary box
+    const currentSummary = liveData.summary;
+    if (!currentSummary) {
+      alert("Please write a rough draft first!");
+      return;
+    }
+
+    setGenerating(true);
+    try {
+      const { data } = await axios.post("/api/ai/generate-summary", { draft: currentSummary });
+      // Tell react-hook-form to update the summary field with the AI response
+      setValue("summary", data.summary);
+    } catch (error) {
+      console.error("AI failed", error);
+      alert("Failed to generate AI summary");
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
@@ -116,13 +139,24 @@ export default function ResumeEditor() {
           <hr />
 
           {/* Professional Summary */}
+                    {/* Professional Summary */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Professional Summary</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Professional Summary</label>
+              <button
+                type="button"
+                onClick={generateAISummary}
+                disabled={generating}
+                className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 font-bold disabled:opacity-50"
+              >
+                {generating ? "✨ Enhancing..." : "✨ Enhance with AI"}
+              </button>
+            </div>
             <textarea 
               {...register("summary")} 
               rows={5}
               className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500" 
-              placeholder="Briefly describe your professional background..."
+              placeholder="Briefly describe your professional background, or write a rough draft and click 'Enhance with AI'!"
             />
           </div>
           
