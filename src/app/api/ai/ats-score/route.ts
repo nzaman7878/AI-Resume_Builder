@@ -81,7 +81,14 @@ export async function POST(req: NextRequest) {
 
     const result = await generateAiContent(prompt);
 
-    const AtsScore = result;
+    let AtsScore = result;
+    if (typeof AtsScore === "string") {
+      try {
+        AtsScore = JSON.parse(AtsScore.replace(/```json/gi, "").replace(/```/g, "").trim());
+      } catch (err) {
+        console.error("Failed to parse ATS score JSON:", err);
+      }
+    }
 
     return NextResponse.json<ApiResponse>(
       {

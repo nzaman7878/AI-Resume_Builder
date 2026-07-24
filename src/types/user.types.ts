@@ -5,3 +5,4 @@ export interface IUser {
   password?: string;
   mobile?: string;
 }
+export interface JWTPayload { userId: string; email: string; } 
