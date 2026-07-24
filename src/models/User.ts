@@ -3,7 +3,7 @@ import mongoose, { Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
 interface UserDocument extends Omit<IUser, "_id">, Document {
-  comparePass(candidatePassword: string): boolean;
+  comparePass(candidatePassword: string): Promise<boolean>;
 }
 
 let userSchema = new mongoose.Schema<UserDocument>(
@@ -35,14 +35,15 @@ let userSchema = new mongoose.Schema<UserDocument>(
   }
 );
 
-userSchema.pre("save", function (): void {
-  if (!this.isModified("password") || !this.password) return;
-  this.password = bcrypt.hashSync(this.password, 10);
+userSchema.pre("save", async function (next): Promise<void> {
+  if (!this.isModified("password") || !this.password) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
-userSchema.methods.comparePass = function (candidatePassword: string): boolean {
+userSchema.methods.comparePass = async function (candidatePassword: string): Promise<boolean> {
   if (!this.password) return false;
-  return bcrypt.compareSync(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 const UserModel = mongoose.models.User || mongoose.model("User", userSchema);
