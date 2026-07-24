@@ -44,9 +44,9 @@ export async function POST(req: NextRequest) {
             
             Rules:
             
-            1. Generate ONLY the work experience description.
-            2. Do NOT generate company names, dates, locations, headings, titles, labels, bullet points, numbering, or explanations.
-            3. The description must be between 80 and 150 words.
+            1. Generate ONLY the work experience description as an HTML unordered list (<ul> with <li>).
+            2. Do NOT generate company names, dates, locations, headings, titles, labels, or explanations.
+            3. The description should consist of 3-5 bullet points.
             4. Write in a professional resume style optimized for ATS systems.
             5. Naturally incorporate the technologies from the provided tech stack.
             6. Describe realistic responsibilities, technical contributions, and achievements expected from someone with the specified role and years of experience.

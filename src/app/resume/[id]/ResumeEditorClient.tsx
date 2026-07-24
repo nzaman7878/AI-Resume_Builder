@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Save, ArrowLeft, Download, Plus, Trash2, Wand2, Sparkles, Activity, X } from "lucide-react";
 import Link from "next/link";
+import RichTextEditor from "@/components/RichTextEditor";
 
 interface FormValues {
   title: string;
@@ -419,7 +420,17 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                         </button>
                       </div>
                     </div>
-                    <textarea {...register(`experience.${index}.description` as const)} className="w-full p-2 border rounded" rows={3} placeholder="Describe responsibilities and achievements..." />
+                    <Controller
+                      name={`experience.${index}.description` as const}
+                      control={control}
+                      render={({ field }) => (
+                        <RichTextEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="Describe responsibilities and achievements... (Use formatting!)"
+                        />
+                      )}
+                    />
                   </div>
                 </div>
               ))}
@@ -580,9 +591,10 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                       <span className="font-medium text-gray-600">{exp.startDate} {exp.startDate && exp.endDate && "-"} {exp.endDate}</span>
                     </div>
                     {exp.description && (
-                      <p className="mt-1.5 whitespace-pre-wrap">
-                        {exp.description}
-                      </p>
+                      <div 
+                        className="mt-1.5 prose prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 max-w-none text-gray-800 text-[13px] leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: exp.description }}
+                      />
                     )}
                   </div>
                 ))}
