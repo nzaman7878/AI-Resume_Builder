@@ -22,15 +22,33 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const body = await req.json();
     await connectToDatabase();
     
+    // Extract only allowed fields to prevent Mass Assignment
+    const allowedUpdates = {
+      title: body.title,
+      summary: body.summary,
+      personalInfo: body.personalInfo,
+      education: body.education,
+      experience: body.experience,
+      projects: body.projects,
+      skills: body.skills,
+      certifications: body.certifications,
+    };
+    
+    // Remove undefined fields so we don't accidentally overwrite existing data with undefined
+    Object.keys(allowedUpdates).forEach(
+      (key) => allowedUpdates[key as keyof typeof allowedUpdates] === undefined && delete allowedUpdates[key as keyof typeof allowedUpdates]
+    );
+    
     const updatedResume = await Resume.findOneAndUpdate(
       { _id: (await params).id, userId }, // Ensure the user owns this resume
-      { $set: body },
-      { new: true } // Return the updated document
+      { $set: allowedUpdates },
+      { returnDocument: 'after' } // Return the updated document
     );
 
     if (!updatedResume) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(updatedResume);
   } catch (error) {
+    console.error("Failed to update resume:", error);
     return NextResponse.json({ error: "Failed to update resume" }, { status: 500 });
   }
 }
