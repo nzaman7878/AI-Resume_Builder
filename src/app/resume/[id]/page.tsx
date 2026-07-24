@@ -33,5 +33,8 @@ export default async function ResumePage({ params }: { params: Promise<{ id: str
     certifications: resume.certifications?.join(", ") || "",
   };
 
-  return <ResumeEditorClient initialData={formattedData as any} resumeId={id} />;
+  // Serialize the data to remove any Mongoose ObjectIds or non-plain objects
+  const safeData = JSON.parse(JSON.stringify(formattedData));
+
+  return <ResumeEditorClient initialData={safeData} resumeId={id} />;
 }

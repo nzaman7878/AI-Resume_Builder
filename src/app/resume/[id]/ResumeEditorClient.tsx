@@ -200,7 +200,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 overflow-hidden print:block print:h-auto print:overflow-visible">
       
       {/* LEFT COLUMN: THE FORM */}
       <div className="w-[55%] flex flex-col bg-white border-r shadow-lg overflow-y-auto print:hidden relative">
@@ -548,11 +548,11 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
       </div>
 
       {/* RIGHT COLUMN: THE LIVE PREVIEW */}
-      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0">
+      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0 print:block print:overflow-visible">
         
         <div 
           id="resume-preview" 
-          className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:p-0 text-gray-800 text-[13px] leading-relaxed transition-transform duration-200"
+          className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:!transform-none print:!m-0 text-gray-800 text-[13px] leading-relaxed transition-transform duration-200"
           style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
         >
           
