@@ -1,6 +1,68 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@theme {
+  /* Colors */
+  --color-primary: #4f46e5;
+  --color-primary-container: #dae2fd;
+  --color-on-primary: #ffffff;
+  
+  --color-surface: #f8f9ff;
+  --color-surface-dim: #cbdbf5;
+  --color-surface-bright: #ffffff;
+  
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #464555;
+  
+  --color-secondary: #565e74;
+  --color-secondary-container: #dae2fd;
+  --color-on-secondary: #ffffff;
+  
+  --color-outline: #777587;
+  --color-outline-variant: #e2e8f0;
+
+  --color-background: #f8fafe;
+  
+  /* Fonts */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-display: var(--font-geist), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-headline: var(--font-geist), sans-serif;
+
+  /* Spacing & Sizes */
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile: 20px;
+  
+  /* Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  .canvas-shadow {
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03);
+  }
+  .resume-preview-bg {
+    background-image: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+  }
+  .hide-scrollbars {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbars::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @media print {
   @page {
     margin: 0; /* This removes the header/footer URLs and dates */

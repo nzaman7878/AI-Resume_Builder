@@ -35,9 +35,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
   useEffect(() => {
     const calculateScale = () => {
       if (containerRef.current) {
-        // A4 width in pixels is ~794px at 96 DPI.
         const A4_WIDTH_PX = 794;
-        // Padding is 32px on each side (p-8)
         const containerWidth = containerRef.current.clientWidth - 64;
         if (containerWidth < A4_WIDTH_PX) {
           setScale(containerWidth / A4_WIDTH_PX);
@@ -61,8 +59,6 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
   const { fields: projFields, append: appendProj, remove: removeProj } = useFieldArray({ control, name: "projects" });
 
   const liveData = watch();
-
-
 
   const showMessage = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
@@ -197,37 +193,38 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
     }
   };
 
-
+  const inputClass = "w-full p-3 rounded-xl border border-outline-variant bg-white text-on-surface focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body text-sm";
+  const labelClass = "block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2";
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden print:block print:h-auto print:overflow-visible">
+    <div className="flex h-screen bg-surface overflow-hidden print:block print:h-auto print:overflow-visible">
       
       {/* LEFT COLUMN: THE FORM */}
-      <div className="w-[55%] flex flex-col bg-white border-r shadow-lg overflow-y-auto print:hidden relative">
+      <div className="w-[55%] flex flex-col bg-surface-bright border-r border-outline-variant shadow-lg overflow-y-auto print:hidden relative hide-scrollbars">
         {/* Toast Message */}
         {message.text && (
-          <div className={`absolute top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded shadow-md text-white font-medium z-50 ${message.type === "success" ? "bg-green-500" : "bg-red-500"}`}>
+          <div className={`absolute top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-xl shadow-md text-white font-medium z-50 text-sm ${message.type === "success" ? "bg-green-600" : "bg-error"}`}>
             {message.text}
           </div>
         )}
 
-        <div className="p-4 border-b flex justify-between items-center bg-gray-50 sticky top-0 z-20">
-          <Link href="/dashboard" className="flex items-center text-gray-600 hover:text-indigo-600 font-medium">
-            <ArrowLeft size={16} className="mr-1" /> Dashboard
+        <div className="p-4 border-b border-outline-variant/50 flex justify-between items-center bg-white/80 backdrop-blur-xl sticky top-0 z-20">
+          <Link href="/dashboard" className="flex items-center text-on-surface-variant hover:text-primary font-medium text-sm transition-colors">
+            <ArrowLeft size={16} className="mr-1.5" /> Dashboard
           </Link>
           
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={checkAtsScore}
               disabled={generating === "ats"}
-              className="flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-200 font-medium transition disabled:opacity-50"
+              className="flex items-center gap-2 bg-primary-container text-primary px-4 py-2 rounded-xl hover:bg-primary-container/80 font-semibold text-sm transition disabled:opacity-50"
             >
               <Activity size={16} />
               {generating === "ats" ? "Analyzing..." : "ATS Check"}
             </button>
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 font-medium transition"
+              className="flex items-center gap-2 bg-surface text-on-surface px-4 py-2 rounded-xl hover:bg-surface-container font-semibold text-sm transition border border-outline-variant"
             >
               <Download size={16} />
               PDF
@@ -235,24 +232,26 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
             <button 
               onClick={handleSubmit(onSubmit)}
               disabled={saving}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:bg-indigo-400 font-medium transition"
+              className="flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-xl hover:opacity-90 disabled:opacity-50 font-bold text-sm shadow-sm transition-all active:scale-95"
             >
               <Save size={16} />
-              {saving ? "Saving..." : "Save"}
+              {saving ? "Saving..." : "Save Resume"}
             </button>
           </div>
         </div>
 
-        <div className="p-8 space-y-8">
+        <div className="p-8 space-y-10">
           {/* AI Configuration Area */}
-          <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex gap-4 items-center">
-            <Sparkles className="text-indigo-500" />
+          <div className="bg-primary/5 border border-primary/10 p-5 rounded-2xl flex gap-5 items-center">
+            <div className="bg-primary/10 p-3 rounded-full">
+              <Sparkles className="text-primary w-6 h-6" />
+            </div>
             <div className="flex-1">
-              <label className="block text-xs font-bold text-indigo-800 uppercase tracking-wider mb-1">Target Experience Level</label>
+              <label className="block text-[11px] font-bold text-primary uppercase tracking-widest mb-2">Target Experience Level</label>
               <select 
                 value={experienceLevel} 
                 onChange={(e) => setExperienceLevel(e.target.value)}
-                className="w-full p-2 border-none bg-white rounded shadow-sm focus:ring-2 focus:ring-indigo-500 text-sm"
+                className="w-full p-2.5 border-none bg-white rounded-xl shadow-sm focus:ring-2 focus:ring-primary/20 text-sm font-semibold text-on-surface outline-none"
               >
                 <option value="Fresher">Fresher (0-1 years)</option>
                 <option value="Junior">Junior (1-3 years)</option>
@@ -260,66 +259,66 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                 <option value="Senior">Senior (6+ years)</option>
               </select>
             </div>
-            <div className="text-xs text-indigo-600 max-w-xs leading-relaxed">
-              Set this level to guide the AI when generating summaries, skills, and descriptions tailored to your target role.
+            <div className="text-xs text-on-surface-variant max-w-xs leading-relaxed font-medium">
+              Set this level to guide the Career Architect AI when generating content tailored to your target role.
             </div>
           </div>
 
           <div>
-            <label htmlFor="title" className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Target Job Title (AI Context)</label>
+            <label htmlFor="title" className={labelClass}>Target Job Title</label>
             <input 
               id="title"
               {...register("title")} 
-              className="w-full p-3 border rounded focus:ring-2 focus:ring-indigo-500" 
-              placeholder="e.g. Software Engineer, Product Manager"
+              className={inputClass} 
+              placeholder="e.g. Senior Software Engineer"
             />
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Personal Details */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">Personal Details</label>
-            <div className="grid grid-cols-2 gap-4">
+            <label className={labelClass}>Personal Details</label>
+            <div className="grid grid-cols-2 gap-5 mt-4">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Full Name</label>
-                <input {...register("personalInfo.fullName")} className="w-full p-2 border rounded" placeholder="John Doe" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Full Name</label>
+                <input {...register("personalInfo.fullName")} className={inputClass} placeholder="Jane Doe" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Email</label>
-                <input {...register("personalInfo.email")} className="w-full p-2 border rounded" placeholder="john@example.com" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Email</label>
+                <input {...register("personalInfo.email")} className={inputClass} placeholder="jane@example.com" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Phone</label>
-                <input {...register("personalInfo.phone")} className="w-full p-2 border rounded" placeholder="(555) 123-4567" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Phone</label>
+                <input {...register("personalInfo.phone")} className={inputClass} placeholder="(555) 123-4567" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Location</label>
-                <input {...register("personalInfo.location")} className="w-full p-2 border rounded" placeholder="New York, NY" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Location</label>
+                <input {...register("personalInfo.location")} className={inputClass} placeholder="San Francisco, CA" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">GitHub</label>
-                <input {...register("personalInfo.github")} className="w-full p-2 border rounded" placeholder="github.com/johndoe" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">GitHub URL</label>
+                <input {...register("personalInfo.github")} className={inputClass} placeholder="github.com/janedoe" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Portfolio / LinkedIn</label>
-                <input {...register("personalInfo.portfolio")} className="w-full p-2 border rounded" placeholder="linkedin.com/in/johndoe" />
+                <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Portfolio / LinkedIn</label>
+                <input {...register("personalInfo.portfolio")} className={inputClass} placeholder="linkedin.com/in/janedoe" />
               </div>
             </div>
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Professional Summary */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Professional Summary</label>
+            <div className="flex justify-between items-center mb-4">
+              <label className={labelClass + " mb-0"}>Professional Summary</label>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => improveContent("summary", liveData.summary)}
                   disabled={generating === "improve_summary"}
-                  className="text-xs flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200 font-bold disabled:opacity-50 transition"
+                  className="text-[11px] flex items-center gap-1.5 bg-surface text-on-surface-variant border border-outline-variant px-3 py-1.5 rounded-lg hover:bg-surface-container-low font-bold uppercase tracking-wider disabled:opacity-50 transition"
                 >
                   <Wand2 size={12} /> {generating === "improve_summary" ? "Polishing..." : "Polish"}
                 </button>
@@ -327,32 +326,32 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                   type="button"
                   onClick={generateAISummary}
                   disabled={generating === "summary"}
-                  className="text-xs flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 font-bold disabled:opacity-50 transition"
+                  className="text-[11px] flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/20 font-bold uppercase tracking-wider disabled:opacity-50 transition"
                 >
-                  <Sparkles size={12} /> {generating === "summary" ? "Generating..." : "Generate AI"}
+                  <Sparkles size={12} /> {generating === "summary" ? "Generating..." : "Auto-Generate"}
                 </button>
               </div>
             </div>
             <textarea 
               {...register("summary")} 
               rows={4}
-              className="w-full p-3 border rounded focus:ring-2 focus:ring-indigo-500" 
-              placeholder="Briefly describe your professional background, or click Generate AI!"
+              className={inputClass} 
+              placeholder="Briefly describe your professional background..."
             />
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Skills */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Skills</label>
+            <div className="flex justify-between items-center mb-4">
+              <label className={labelClass + " mb-0"}>Skills</label>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => improveContent("skills", liveData.skills)}
                   disabled={generating === "improve_skills"}
-                  className="text-xs flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200 font-bold disabled:opacity-50 transition"
+                  className="text-[11px] flex items-center gap-1.5 bg-surface text-on-surface-variant border border-outline-variant px-3 py-1.5 rounded-lg hover:bg-surface-container-low font-bold uppercase tracking-wider disabled:opacity-50 transition"
                 >
                   <Wand2 size={12} /> {generating === "improve_skills" ? "Polishing..." : "Polish"}
                 </button>
@@ -360,62 +359,62 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                   type="button"
                   onClick={generateAISkills}
                   disabled={generating === "skills"}
-                  className="text-xs flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 font-bold disabled:opacity-50 transition"
+                  className="text-[11px] flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/20 font-bold uppercase tracking-wider disabled:opacity-50 transition"
                 >
                   <Sparkles size={12} /> {generating === "skills" ? "Generating..." : "Auto-Generate"}
                 </button>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mb-2">Comma separated (e.g. JavaScript, React, Node.js)</p>
+            <p className="text-xs text-on-surface-variant mb-3">Comma separated (e.g. JavaScript, React, Node.js)</p>
             <input 
               {...register("skills")}
-              className="w-full p-3 border rounded focus:ring-2 focus:ring-indigo-500" 
+              className={inputClass} 
               placeholder="React, TypeScript, Next.js..."
             />
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Experience */}
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Experience</label>
-              <button type="button" onClick={() => appendExp({ company: "", position: "", startDate: "", endDate: "", description: "" })} className="text-sm flex items-center text-indigo-600 font-medium">
-                <Plus size={16} /> Add Experience
+            <div className="flex justify-between items-center mb-6">
+              <label className={labelClass + " mb-0"}>Experience</label>
+              <button type="button" onClick={() => appendExp({ company: "", position: "", startDate: "", endDate: "", description: "" })} className="text-[11px] flex items-center gap-1 text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors">
+                <Plus size={14} /> Add Experience
               </button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {expFields.map((field, index) => (
-                <div key={field.id} className="p-5 border rounded-xl relative bg-gray-50 shadow-sm">
-                  <button type="button" onClick={() => removeExp(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition">
+                <div key={field.id} className="p-6 border border-outline-variant rounded-2xl relative bg-surface-container-lowest shadow-sm">
+                  <button type="button" onClick={() => removeExp(index)} className="absolute top-4 right-4 text-outline hover:text-error transition p-2 hover:bg-error/10 rounded-lg">
                     <Trash2 size={16} />
                   </button>
-                  <div className="grid grid-cols-2 gap-4 mb-3">
+                  <div className="grid grid-cols-2 gap-5 mb-5 pr-10">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Company</label>
-                      <input {...register(`experience.${index}.company` as const)} className="w-full p-2 border rounded" placeholder="Company Name" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Company</label>
+                      <input {...register(`experience.${index}.company` as const)} className={inputClass} placeholder="Acme Corp" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Position</label>
-                      <input {...register(`experience.${index}.position` as const)} className="w-full p-2 border rounded" placeholder="Job Title" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Position</label>
+                      <input {...register(`experience.${index}.position` as const)} className={inputClass} placeholder="Senior Developer" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Start Date</label>
-                      <input {...register(`experience.${index}.startDate` as const)} className="w-full p-2 border rounded" placeholder="MM/YYYY" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Start Date</label>
+                      <input {...register(`experience.${index}.startDate` as const)} className={inputClass} placeholder="Jan 2020" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">End Date</label>
-                      <input {...register(`experience.${index}.endDate` as const)} className="w-full p-2 border rounded" placeholder="MM/YYYY or Present" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">End Date</label>
+                      <input {...register(`experience.${index}.endDate` as const)} className={inputClass} placeholder="Present" />
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="block text-xs text-gray-500">Description</label>
+                    <div className="flex justify-between items-center mb-3">
+                      <label className="block text-xs text-on-surface-variant font-medium">Description</label>
                       <div className="flex gap-2">
-                        <button type="button" onClick={() => improveContent(`experience.${index}.description`, liveData.experience[index]?.description)} disabled={generating === `improve_experience.${index}.description`} className="text-[10px] flex items-center gap-1 bg-gray-200 text-gray-700 px-2 py-1 rounded font-medium disabled:opacity-50">
+                        <button type="button" onClick={() => improveContent(`experience.${index}.description`, liveData.experience[index]?.description)} disabled={generating === `improve_experience.${index}.description`} className="text-[10px] flex items-center gap-1.5 bg-surface text-on-surface-variant border border-outline-variant px-2 py-1 rounded-md hover:bg-surface-container-low font-bold uppercase tracking-wider disabled:opacity-50 transition">
                           <Wand2 size={10} /> Polish
                         </button>
-                        <button type="button" onClick={() => generateAIExperience(index)} disabled={generating === `exp_${index}`} className="text-[10px] flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium disabled:opacity-50">
+                        <button type="button" onClick={() => generateAIExperience(index)} disabled={generating === `exp_${index}`} className="text-[10px] flex items-center gap-1.5 bg-primary/10 text-primary px-2 py-1 rounded-md hover:bg-primary/20 font-bold uppercase tracking-wider disabled:opacity-50 transition">
                           <Sparkles size={10} /> Generate AI
                         </button>
                       </div>
@@ -424,11 +423,13 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                       name={`experience.${index}.description` as const}
                       control={control}
                       render={({ field }) => (
-                        <RichTextEditor
-                          value={field.value || ""}
-                          onChange={field.onChange}
-                          placeholder="Describe responsibilities and achievements... (Use formatting!)"
-                        />
+                         <div className="rounded-xl overflow-hidden border border-outline-variant">
+                           <RichTextEditor
+                             value={field.value || ""}
+                             onChange={field.onChange}
+                             placeholder="Describe responsibilities and achievements..."
+                           />
+                         </div>
                       )}
                     />
                   </div>
@@ -437,91 +438,91 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
             </div>
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Projects */}
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Projects</label>
-              <button type="button" onClick={() => appendProj({ title: "", description: "", techStack: "", githubUrl: "", liveUrl: "" })} className="text-sm flex items-center text-indigo-600 font-medium">
-                <Plus size={16} /> Add Project
+            <div className="flex justify-between items-center mb-6">
+              <label className={labelClass + " mb-0"}>Projects</label>
+              <button type="button" onClick={() => appendProj({ title: "", description: "", techStack: "", githubUrl: "", liveUrl: "" })} className="text-[11px] flex items-center gap-1 text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors">
+                <Plus size={14} /> Add Project
               </button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {projFields.map((field, index) => (
-                <div key={field.id} className="p-5 border rounded-xl relative bg-gray-50 shadow-sm">
-                  <button type="button" onClick={() => removeProj(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition">
+                <div key={field.id} className="p-6 border border-outline-variant rounded-2xl relative bg-surface-container-lowest shadow-sm">
+                  <button type="button" onClick={() => removeProj(index)} className="absolute top-4 right-4 text-outline hover:text-error transition p-2 hover:bg-error/10 rounded-lg">
                     <Trash2 size={16} />
                   </button>
-                  <div className="grid grid-cols-2 gap-4 mb-3 pr-8">
+                  <div className="grid grid-cols-2 gap-5 mb-5 pr-10">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Project Title</label>
-                      <input {...register(`projects.${index}.title` as const)} className="w-full p-2 border rounded" placeholder="Project Name" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Project Title</label>
+                      <input {...register(`projects.${index}.title` as const)} className={inputClass} placeholder="Project Name" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Tech Stack (comma separated)</label>
-                      <input {...register(`projects.${index}.techStack` as const)} className="w-full p-2 border rounded" placeholder="React, Node.js" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Tech Stack</label>
+                      <input {...register(`projects.${index}.techStack` as const)} className={inputClass} placeholder="React, Node.js" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">GitHub URL</label>
-                      <input {...register(`projects.${index}.githubUrl` as const)} className="w-full p-2 border rounded" placeholder="github.com/..." />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">GitHub URL</label>
+                      <input {...register(`projects.${index}.githubUrl` as const)} className={inputClass} placeholder="github.com/..." />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Live URL</label>
-                      <input {...register(`projects.${index}.liveUrl` as const)} className="w-full p-2 border rounded" placeholder="https://..." />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Live URL</label>
+                      <input {...register(`projects.${index}.liveUrl` as const)} className={inputClass} placeholder="https://..." />
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="block text-xs text-gray-500">Description</label>
+                    <div className="flex justify-between items-center mb-3">
+                      <label className="block text-xs text-on-surface-variant font-medium">Description</label>
                       <div className="flex gap-2">
-                        <button type="button" onClick={() => improveContent(`projects.${index}.description`, liveData.projects[index]?.description)} disabled={generating === `improve_projects.${index}.description`} className="text-[10px] flex items-center gap-1 bg-gray-200 text-gray-700 px-2 py-1 rounded font-medium disabled:opacity-50">
+                        <button type="button" onClick={() => improveContent(`projects.${index}.description`, liveData.projects[index]?.description)} disabled={generating === `improve_projects.${index}.description`} className="text-[10px] flex items-center gap-1.5 bg-surface text-on-surface-variant border border-outline-variant px-2 py-1 rounded-md hover:bg-surface-container-low font-bold uppercase tracking-wider disabled:opacity-50 transition">
                           <Wand2 size={10} /> Polish
                         </button>
-                        <button type="button" onClick={() => generateAIProject(index)} disabled={generating === `proj_${index}`} className="text-[10px] flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium disabled:opacity-50">
+                        <button type="button" onClick={() => generateAIProject(index)} disabled={generating === `proj_${index}`} className="text-[10px] flex items-center gap-1.5 bg-primary/10 text-primary px-2 py-1 rounded-md hover:bg-primary/20 font-bold uppercase tracking-wider disabled:opacity-50 transition">
                           <Sparkles size={10} /> Generate AI
                         </button>
                       </div>
                     </div>
-                    <textarea {...register(`projects.${index}.description` as const)} className="w-full p-2 border rounded" rows={3} placeholder="Describe project features and impact..." />
+                    <textarea {...register(`projects.${index}.description` as const)} className={inputClass} rows={3} placeholder="Describe project features and impact..." />
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Education */}
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Education</label>
-              <button type="button" onClick={() => appendEdu({ school: "", degree: "", startDate: "", endDate: "" })} className="text-sm flex items-center text-indigo-600 font-medium">
-                <Plus size={16} /> Add Education
+            <div className="flex justify-between items-center mb-6">
+              <label className={labelClass + " mb-0"}>Education</label>
+              <button type="button" onClick={() => appendEdu({ school: "", degree: "", startDate: "", endDate: "" })} className="text-[11px] flex items-center gap-1 text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors">
+                <Plus size={14} /> Add Education
               </button>
             </div>
             <div className="space-y-4">
               {eduFields.map((field, index) => (
-                <div key={field.id} className="p-4 border rounded relative bg-gray-50 shadow-sm">
-                  <button type="button" onClick={() => removeEdu(index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition">
+                <div key={field.id} className="p-5 border border-outline-variant rounded-2xl relative bg-surface-container-lowest shadow-sm">
+                  <button type="button" onClick={() => removeEdu(index)} className="absolute top-4 right-4 text-outline hover:text-error transition p-2 hover:bg-error/10 rounded-lg">
                     <Trash2 size={16} />
                   </button>
-                  <div className="grid grid-cols-2 gap-4 mb-2 pr-8">
+                  <div className="grid grid-cols-2 gap-5 pr-10">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">School / University</label>
-                      <input {...register(`education.${index}.school` as const)} className="w-full p-2 border rounded" placeholder="University Name" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">School / University</label>
+                      <input {...register(`education.${index}.school` as const)} className={inputClass} placeholder="University Name" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Degree</label>
-                      <input {...register(`education.${index}.degree` as const)} className="w-full p-2 border rounded" placeholder="B.S. Computer Science" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Degree</label>
+                      <input {...register(`education.${index}.degree` as const)} className={inputClass} placeholder="B.S. Computer Science" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Start Date</label>
-                      <input {...register(`education.${index}.startDate` as const)} className="w-full p-2 border rounded" placeholder="YYYY" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">Start Date</label>
+                      <input {...register(`education.${index}.startDate` as const)} className={inputClass} placeholder="2018" />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">End Date</label>
-                      <input {...register(`education.${index}.endDate` as const)} className="w-full p-2 border rounded" placeholder="YYYY or Present" />
+                      <label className="block text-xs text-on-surface-variant font-medium mb-1.5">End Date</label>
+                      <input {...register(`education.${index}.endDate` as const)} className={inputClass} placeholder="2022" />
                     </div>
                   </div>
                 </div>
@@ -529,15 +530,15 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
             </div>
           </div>
 
-          <hr />
+          <div className="h-px bg-outline-variant/50 w-full" />
 
           {/* Certifications */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Certifications</label>
-            <p className="text-xs text-gray-500 mb-2">Comma separated (e.g. AWS Certified Solutions Architect, PMP)</p>
+            <label className={labelClass}>Certifications</label>
+            <p className="text-xs text-on-surface-variant mb-3">Comma separated (e.g. AWS Certified, PMP)</p>
             <input 
               {...register("certifications")}
-              className="w-full p-3 border rounded focus:ring-2 focus:ring-indigo-500" 
+              className={inputClass} 
               placeholder="Add your certifications..."
             />
           </div>
@@ -548,21 +549,21 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
       </div>
 
       {/* RIGHT COLUMN: THE LIVE PREVIEW */}
-      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0 print:block print:overflow-visible">
+      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-surface-dim flex justify-center print:w-full print:bg-white print:p-0 print:block print:overflow-visible hide-scrollbars items-start pt-12">
         
         <div 
           id="resume-preview" 
-          className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:!transform-none print:!m-0 text-gray-800 text-[13px] leading-relaxed transition-transform duration-200"
+          className="bg-white w-[210mm] min-h-[297mm] canvas-shadow p-12 print:shadow-none print:!transform-none print:!m-0 text-on-surface font-body text-[13px] leading-relaxed transition-transform duration-200"
           style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
         >
           
-          <div className="border-b-[1.5px] border-gray-400 pb-4 mb-5 text-center">
-            <h1 className="text-3xl font-serif tracking-wide text-gray-900">
+          <div className="border-b-2 border-outline pb-6 mb-6 text-center">
+            <h1 className="text-4xl font-headline font-semibold tracking-tight text-on-surface">
               {liveData?.personalInfo?.fullName || "Your Name"}
             </h1>
-            {liveData?.title && <h2 className="text-md text-indigo-700 mt-1 uppercase tracking-widest">{liveData.title}</h2>}
+            {liveData?.title && <h2 className="text-sm font-headline text-primary mt-2 uppercase tracking-widest font-semibold">{liveData.title}</h2>}
             
-            <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-3 text-gray-600 text-[11px]">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-on-surface-variant text-xs font-medium">
               {liveData?.personalInfo?.email && <span>{liveData.personalInfo.email}</span>}
               {liveData?.personalInfo?.phone && <span>• {liveData.personalInfo.phone}</span>}
               {liveData?.personalInfo?.location && <span>• {liveData.personalInfo.location}</span>}
@@ -572,27 +573,27 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
           </div>
 
           {liveData?.summary && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-2 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Professional Summary</h2>
-              <p className="whitespace-pre-wrap">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Professional Summary</h2>
+              <p className="whitespace-pre-wrap text-on-surface-variant leading-loose">
                 {liveData.summary}
               </p>
             </div>
           )}
 
           {liveData?.experience && liveData.experience.length > 0 && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-3 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Experience</h2>
-              <div className="space-y-4">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Experience</h2>
+              <div className="space-y-6">
                 {liveData.experience.map((exp: any, index: number) => (
                   <div key={index}>
-                    <div className="flex justify-between font-bold text-gray-900">
-                      <span>{exp.position} {exp.company && `| ${exp.company}`}</span>
-                      <span className="font-medium text-gray-600">{exp.startDate} {exp.startDate && exp.endDate && "-"} {exp.endDate}</span>
+                    <div className="flex justify-between font-bold text-on-surface mb-1">
+                      <span className="text-sm">{exp.position} {exp.company && <span className="text-on-surface-variant font-normal">| {exp.company}</span>}</span>
+                      <span className="text-xs font-semibold text-on-surface-variant">{exp.startDate} {exp.startDate && exp.endDate && "-"} {exp.endDate}</span>
                     </div>
                     {exp.description && (
                       <div 
-                        className="mt-1.5 prose prose-sm prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 max-w-none text-gray-800 text-[13px] leading-relaxed"
+                        className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 prose-ul:pl-4 max-w-none text-on-surface-variant text-[13px] leading-loose"
                         dangerouslySetInnerHTML={{ __html: exp.description }}
                       />
                     )}
@@ -603,24 +604,24 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
           )}
 
           {liveData?.projects && liveData.projects.length > 0 && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-3 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Projects</h2>
-              <div className="space-y-4">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Projects</h2>
+              <div className="space-y-5">
                 {liveData.projects.map((proj: any, index: number) => (
                   <div key={index}>
-                    <div className="flex justify-between font-bold text-gray-900">
-                      <span>{proj.title}</span>
-                      <div className="flex gap-2 font-medium text-gray-600 text-[11px]">
-                        {proj.githubUrl && <a href={proj.githubUrl} className="hover:underline" target="_blank">GitHub</a>}
+                    <div className="flex justify-between font-bold text-on-surface mb-1">
+                      <span className="text-sm">{proj.title}</span>
+                      <div className="flex gap-2 font-semibold text-on-surface-variant text-xs">
+                        {proj.githubUrl && <a href={proj.githubUrl} className="hover:text-primary transition-colors" target="_blank">GitHub</a>}
                         {proj.githubUrl && proj.liveUrl && <span>|</span>}
-                        {proj.liveUrl && <a href={proj.liveUrl} className="hover:underline" target="_blank">Live</a>}
+                        {proj.liveUrl && <a href={proj.liveUrl} className="hover:text-primary transition-colors" target="_blank">Live</a>}
                       </div>
                     </div>
                     {proj.techStack && (
-                      <div className="text-[11px] text-indigo-700 font-medium mb-1.5">{proj.techStack}</div>
+                      <div className="text-xs text-primary font-semibold mb-2">{proj.techStack}</div>
                     )}
                     {proj.description && (
-                      <p className="whitespace-pre-wrap">
+                      <p className="whitespace-pre-wrap text-on-surface-variant leading-loose">
                         {proj.description}
                       </p>
                     )}
@@ -631,16 +632,16 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
           )}
 
           {liveData?.education && liveData.education.length > 0 && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-3 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Education</h2>
-              <div className="space-y-3">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Education</h2>
+              <div className="space-y-4">
                 {liveData.education.map((edu: any, index: number) => (
                   <div key={index} className="flex justify-between">
                     <div>
-                      <span className="font-bold text-gray-900">{edu.school}</span>
-                      {edu.degree && <span>, {edu.degree}</span>}
+                      <span className="font-bold text-on-surface text-sm">{edu.school}</span>
+                      {edu.degree && <span className="text-on-surface-variant text-sm">, {edu.degree}</span>}
                     </div>
-                    <span className="font-medium text-gray-600">{edu.startDate} {edu.startDate && edu.endDate && "-"} {edu.endDate}</span>
+                    <span className="text-xs font-semibold text-on-surface-variant">{edu.startDate} {edu.startDate && edu.endDate && "-"} {edu.endDate}</span>
                   </div>
                 ))}
               </div>
@@ -648,18 +649,18 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
           )}
 
           {liveData?.skills && liveData.skills.trim() && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-2 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Skills</h2>
-              <p className="leading-relaxed">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Skills</h2>
+              <p className="leading-loose text-on-surface-variant">
                 {liveData.skills}
               </p>
             </div>
           )}
 
           {liveData?.certifications && liveData.certifications.trim() && (
-            <div className="mb-5">
-              <h2 className="text-[14px] font-bold uppercase tracking-widest mb-2 border-b-[1.5px] border-gray-400 pb-1 text-gray-900">Certifications</h2>
-              <p className="leading-relaxed">
+            <div className="mb-6">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Certifications</h2>
+              <p className="leading-loose text-on-surface-variant">
                 {liveData.certifications}
               </p>
             </div>
@@ -670,19 +671,19 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
       {/* ATS Score Modal */}
       {showAtsModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
-            <button onClick={() => setShowAtsModal(false)} className="absolute top-6 right-6 text-gray-400 hover:text-gray-700">
+        <div className="fixed inset-0 bg-on-surface/50 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+          <div className="bg-surface-bright rounded-[24px] p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border border-outline-variant">
+            <button onClick={() => setShowAtsModal(false)} className="absolute top-6 right-6 text-outline hover:text-on-surface transition">
               <X size={24} />
             </button>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-2">
-              <Activity className="text-purple-600" /> ATS Analysis Report
+            <h2 className="text-2xl font-headline font-bold text-on-surface mb-2 flex items-center gap-3">
+              <Activity className="text-primary" /> ATS Analysis Report
             </h2>
             
             {atsScoreData ? (
               <div className="space-y-6 mt-6">
-                <div className="flex items-center gap-6 bg-purple-50 p-6 rounded-xl border border-purple-100">
-                  <div className="w-24 h-24 rounded-full flex items-center justify-center border-4 font-bold text-3xl"
+                <div className="flex items-center gap-6 bg-primary/5 p-6 rounded-2xl border border-primary/20">
+                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center border-[6px] font-headline font-bold text-3xl shadow-sm"
                     style={{
                       borderColor: atsScoreData.atsScore >= 80 ? "#22c55e" : atsScoreData.atsScore >= 60 ? "#eab308" : "#ef4444",
                       color: atsScoreData.atsScore >= 80 ? "#16a34a" : atsScoreData.atsScore >= 60 ? "#ca8a04" : "#dc2626"
@@ -690,47 +691,47 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                     {atsScoreData.atsScore}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg text-gray-900 mb-1">Overall Score</h3>
-                    <p className="text-gray-600 text-sm">{atsScoreData.summary}</p>
+                    <h3 className="font-headline font-bold text-xl text-on-surface mb-1">Overall Score</h3>
+                    <p className="text-on-surface-variant text-sm font-body leading-relaxed">{atsScoreData.summary}</p>
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-bold text-green-700 mb-3 flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full" /> Strengths
+                  <div className="bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+                    <h4 className="font-headline font-bold text-green-700 mb-4 flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 bg-green-500 rounded-full" /> Strengths
                     </h4>
                     <ul className="space-y-2">
                       {atsScoreData.strengths?.map((s: string, i: number) => (
-                        <li key={i} className="text-sm text-gray-700 bg-green-50 p-2 rounded">{s}</li>
+                        <li key={i} className="text-sm font-body text-on-surface-variant bg-green-50/50 p-2.5 rounded-lg">{s}</li>
                       ))}
                     </ul>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-orange-700 mb-3 flex items-center gap-2">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full" /> Needs Improvement
+                  <div className="bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+                    <h4 className="font-headline font-bold text-orange-700 mb-4 flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 bg-orange-500 rounded-full" /> Needs Improvement
                     </h4>
                     <ul className="space-y-2">
                       {atsScoreData.improvements?.map((s: string, i: number) => (
-                        <li key={i} className="text-sm text-gray-700 bg-orange-50 p-2 rounded">{s}</li>
+                        <li key={i} className="text-sm font-body text-on-surface-variant bg-orange-50/50 p-2.5 rounded-lg">{s}</li>
                       ))}
                     </ul>
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-bold text-blue-700 mb-3 flex items-center gap-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full" /> AI Recommendations
+                <div className="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
+                  <h4 className="font-headline font-bold text-primary mb-4 flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 bg-primary rounded-full" /> AI Recommendations
                   </h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {atsScoreData.recommendations?.map((s: string, i: number) => (
-                      <li key={i} className="text-sm text-gray-700 bg-blue-50 p-3 rounded-lg border border-blue-100">{s}</li>
+                      <li key={i} className="text-sm font-body text-on-surface-variant bg-primary/5 p-3.5 rounded-xl border border-primary/10 leading-relaxed">{s}</li>
                     ))}
                   </ul>
                 </div>
               </div>
             ) : (
-              <p className="mt-4 text-red-500">Failed to load ATS data. Please try again.</p>
+              <p className="mt-4 text-error font-medium">Failed to load ATS data. Please try again.</p>
             )}
           </div>
         </div>
