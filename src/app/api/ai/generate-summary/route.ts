@@ -2,9 +2,20 @@ import { generateAiContent } from "@/lib/gemini";
 import { GenerateSummaryBody } from "@/types/ai.types";
 import { ApiResponse } from "@/types/api.types";
 import { NextRequest, NextResponse } from "next/server";
+import { aiRateLimit, getIpAddress } from "@/lib/ratelimit";
 
 export async function POST(req: NextRequest) {
     try {
+    if (aiRateLimit) {
+      const ip = getIpAddress(req as any);
+      const { success } = await aiRateLimit.limit(ip);
+      if (!success) {
+        return NextResponse.json(
+          { success: false, message: "Too many requests. Please try again later." },
+          { status: 429 }
+        );
+      }
+    }
         const body: GenerateSummaryBody = await req.json();
 
         const { experienceLevel, skills, jobTitle } = body;

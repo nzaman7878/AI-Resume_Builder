@@ -4,9 +4,18 @@ import jwt from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/models/User";
 import { LoginSchema } from "@/lib/validations";
+import { authRateLimit, getIpAddress } from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
   try {
+    if (authRateLimit) {
+      const ip = getIpAddress(req);
+      const { success } = await authRateLimit.limit(ip);
+      if (!success) {
+        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      }
+    }
+
     const json = await req.json();
     const parsed = LoginSchema.safeParse(json);
 
