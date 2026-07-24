@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Resume from "@/models/Resume";
 import { getUserIdFromToken } from "@/lib/auth";
+import { ResumeUpdateSchema } from "@/lib/validations";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const userId = await getUserIdFromToken();
@@ -19,26 +20,22 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const body = await req.json();
+    const json = await req.json();
+    const parsed = ResumeUpdateSchema.safeParse(json);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid data", details: parsed.error.format() },
+        { status: 400 }
+      );
+    }
+    
+    // Zod has already filtered out any fields not present in the schema, so this is safe from mass assignment
+    // And it has removed undefined fields inherently.
+    const allowedUpdates = parsed.data;
+    
     await connectToDatabase();
-    
-    // Extract only allowed fields to prevent Mass Assignment
-    const allowedUpdates = {
-      title: body.title,
-      summary: body.summary,
-      personalInfo: body.personalInfo,
-      education: body.education,
-      experience: body.experience,
-      projects: body.projects,
-      skills: body.skills,
-      certifications: body.certifications,
-    };
-    
-    // Remove undefined fields so we don't accidentally overwrite existing data with undefined
-    Object.keys(allowedUpdates).forEach(
-      (key) => allowedUpdates[key as keyof typeof allowedUpdates] === undefined && delete allowedUpdates[key as keyof typeof allowedUpdates]
-    );
-    
+
     const updatedResume = await Resume.findOneAndUpdate(
       { _id: (await params).id, userId }, // Ensure the user owns this resume
       { $set: allowedUpdates },

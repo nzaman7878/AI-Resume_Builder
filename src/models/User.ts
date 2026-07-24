@@ -35,10 +35,9 @@ let userSchema = new mongoose.Schema<UserDocument>(
   }
 );
 
-userSchema.pre("save", async function (next): Promise<void> {
-  if (!this.isModified("password") || !this.password) return next();
+userSchema.pre("save", async function (): Promise<void> {
+  if (!this.isModified("password") || !this.password) return;
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 userSchema.methods.comparePass = async function (candidatePassword: string): Promise<boolean> {
