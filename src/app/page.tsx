@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Sparkles, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
           <span className="font-headline font-bold text-xl text-on-surface">Career Architect</span>
         </div>
         <div className="flex gap-4 items-center">
+          <ThemeToggle />
           <Link href="/auth/login" className="font-body font-semibold text-sm text-on-surface hover:text-primary transition-colors">
             Log in
           </Link>
@@ -33,7 +35,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
         <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary-container/40 blur-[100px] rounded-full pointer-events-none -z-10"></div>
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-md border border-outline-variant shadow-sm mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-bright/60 backdrop-blur-md border border-outline-variant shadow-sm mb-8">
           <Sparkles className="w-4 h-4 text-primary" />
           <span className="text-xs font-bold uppercase tracking-widest text-primary">AI-Powered Resume Builder</span>
         </div>
@@ -57,14 +59,14 @@ export default function Home() {
           </Link>
           <Link
             href="/auth/login"
-            className="flex items-center justify-center px-8 py-4 rounded-xl font-bold text-lg text-on-surface bg-white border border-outline-variant hover:bg-surface-container-low transition-colors"
+            className="flex items-center justify-center px-8 py-4 rounded-xl font-bold text-lg text-on-surface bg-surface-bright border border-outline-variant hover:bg-surface-container-low transition-colors"
           >
             View Demo
           </Link>
         </div>
 
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl text-left">
-          <div className="bg-white/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
+          <div className="bg-surface-bright/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
               <Sparkles className="text-primary w-6 h-6" />
             </div>
@@ -72,7 +74,7 @@ export default function Home() {
             <p className="text-on-surface-variant leading-relaxed">We automatically polish your bullet points to match exactly what hiring managers are looking for.</p>
           </div>
           
-          <div className="bg-white/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
+          <div className="bg-surface-bright/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
               <Zap className="text-primary w-6 h-6" />
             </div>
@@ -80,7 +82,7 @@ export default function Home() {
             <p className="text-on-surface-variant leading-relaxed">Get real-time feedback on your Applicant Tracking System score before you even download the PDF.</p>
           </div>
 
-          <div className="bg-white/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
+          <div className="bg-surface-bright/50 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl">
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
               <ShieldCheck className="text-primary w-6 h-6" />
             </div>

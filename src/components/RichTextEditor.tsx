@@ -26,7 +26,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm w-full min-h-[120px] max-w-none p-3 focus:outline-none text-sm bg-white",
+          "prose prose-sm w-full min-h-[120px] max-w-none p-3 focus:outline-none text-sm bg-surface-bright",
       },
     },
     onUpdate: ({ editor }) => {

@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function TopNav() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function TopNav() {
   };
 
   return (
-    <nav className="hidden md:flex sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-outline-variant w-full px-10 py-4 justify-end items-center">
+    <nav className="hidden md:flex sticky top-0 z-40 bg-surface-bright/80 backdrop-blur-xl border-b border-outline-variant w-full px-10 py-4 justify-end items-center">
       <div className="flex items-center gap-6">
         <div className="relative">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
@@ -31,6 +32,9 @@ export default function TopNav() {
         <button className="text-on-surface-variant hover:text-primary transition-opacity font-body text-sm font-medium">
           Support
         </button>
+        
+        
+        <ThemeToggle />
         
         <button 
           onClick={handleLogout}

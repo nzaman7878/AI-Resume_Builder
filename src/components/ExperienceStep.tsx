@@ -125,7 +125,7 @@ export default function ExperienceStep({ resumeId, onNext, onBack }: Props) {
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl border shadow-sm">
+        <div className="bg-surface-bright p-8 rounded-3xl border shadow-sm">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold">Work Experience</h1>

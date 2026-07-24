@@ -89,7 +89,7 @@ export default function DashboardPage() {
               </div>
               
               {/* Minimalist Resume Sketch Mockup */}
-              <div className="w-full h-full bg-white rounded-t-lg shadow-2xl p-4 flex flex-col gap-2 translate-y-4 group-hover:translate-y-2 transition-transform duration-500 border border-outline-variant/30">
+              <div className="w-full h-full bg-surface-bright rounded-t-lg shadow-2xl p-4 flex flex-col gap-2 translate-y-4 group-hover:translate-y-2 transition-transform duration-500 border border-outline-variant/30">
                 <div className="h-4 w-1/2 bg-surface-dim rounded"></div>
                 <div className="h-2 w-1/3 bg-surface-container rounded"></div>
                 <div className="mt-4 flex flex-col gap-2">
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Bottom Info Area */}
-            <div className="p-6 bg-white flex-1 flex flex-col">
+            <div className="p-6 bg-surface-bright flex-1 flex flex-col">
               <h4 className="font-body text-base font-semibold text-on-surface mb-1 truncate">{resume.title}</h4>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">
                 Edited {new Date(resume.updatedAt).toLocaleDateString()}
@@ -158,7 +158,7 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <div className="hidden lg:flex w-72 h-48 bg-white/50 backdrop-blur-xl rounded-2xl border border-white p-6 shadow-xl flex-col justify-end gap-2">
+          <div className="hidden lg:flex w-72 h-48 bg-surface-bright/50 backdrop-blur-xl rounded-2xl border border-white p-6 shadow-xl flex-col justify-end gap-2">
             <div className="flex justify-between items-end h-full gap-2">
               <div className="bg-primary/20 w-full rounded-t-lg" style={{ height: "60%" }}></div>
               <div className="bg-primary/40 w-full rounded-t-lg" style={{ height: "45%" }}></div>

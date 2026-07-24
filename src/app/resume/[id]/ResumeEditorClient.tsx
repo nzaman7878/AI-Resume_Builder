@@ -193,7 +193,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
     }
   };
 
-  const inputClass = "w-full p-3 rounded-xl border border-outline-variant bg-white text-on-surface focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body text-sm";
+  const inputClass = "w-full p-3 rounded-xl border border-outline-variant bg-surface-bright text-on-surface focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body text-sm";
   const labelClass = "block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2";
 
   return (
@@ -208,7 +208,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
           </div>
         )}
 
-        <div className="p-4 border-b border-outline-variant/50 flex justify-between items-center bg-white/80 backdrop-blur-xl sticky top-0 z-20">
+        <div className="p-4 border-b border-outline-variant/50 flex justify-between items-center bg-surface-bright/80 backdrop-blur-xl sticky top-0 z-20">
           <Link href="/dashboard" className="flex items-center text-on-surface-variant hover:text-primary font-medium text-sm transition-colors">
             <ArrowLeft size={16} className="mr-1.5" /> Dashboard
           </Link>
@@ -251,7 +251,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
               <select 
                 value={experienceLevel} 
                 onChange={(e) => setExperienceLevel(e.target.value)}
-                className="w-full p-2.5 border-none bg-white rounded-xl shadow-sm focus:ring-2 focus:ring-primary/20 text-sm font-semibold text-on-surface outline-none"
+                className="w-full p-2.5 border-none bg-surface-bright rounded-xl shadow-sm focus:ring-2 focus:ring-primary/20 text-sm font-semibold text-on-surface outline-none"
               >
                 <option value="Fresher">Fresher (0-1 years)</option>
                 <option value="Junior">Junior (1-3 years)</option>
@@ -549,21 +549,21 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
       </div>
 
       {/* RIGHT COLUMN: THE LIVE PREVIEW */}
-      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-surface-dim flex justify-center print:w-full print:bg-white print:p-0 print:block print:overflow-visible hide-scrollbars items-start pt-12">
+      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-surface-dim flex justify-center print:w-full print:bg-surface-bright print:p-0 print:block print:overflow-visible hide-scrollbars items-start pt-12">
         
         <div 
           id="resume-preview" 
-          className="bg-white w-[210mm] min-h-[297mm] canvas-shadow p-12 print:shadow-none print:!transform-none print:!m-0 text-on-surface font-body text-[13px] leading-relaxed transition-transform duration-200"
+          className="bg-white w-[210mm] min-h-[297mm] canvas-shadow p-12 print:shadow-none print:!transform-none print:!m-0 text-gray-900 font-body text-[13px] leading-relaxed transition-transform duration-200"
           style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
         >
           
-          <div className="border-b-2 border-outline pb-6 mb-6 text-center">
-            <h1 className="text-4xl font-headline font-semibold tracking-tight text-on-surface">
+          <div className="border-b-2 border-gray-300 pb-6 mb-6 text-center">
+            <h1 className="text-4xl font-headline font-semibold tracking-tight text-gray-900">
               {liveData?.personalInfo?.fullName || "Your Name"}
             </h1>
-            {liveData?.title && <h2 className="text-sm font-headline text-primary mt-2 uppercase tracking-widest font-semibold">{liveData.title}</h2>}
+            {liveData?.title && <h2 className="text-sm font-headline text-indigo-600 mt-2 uppercase tracking-widest font-semibold">{liveData.title}</h2>}
             
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-on-surface-variant text-xs font-medium">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-gray-600 text-xs font-medium">
               {liveData?.personalInfo?.email && <span>{liveData.personalInfo.email}</span>}
               {liveData?.personalInfo?.phone && <span>• {liveData.personalInfo.phone}</span>}
               {liveData?.personalInfo?.location && <span>• {liveData.personalInfo.location}</span>}
@@ -574,8 +574,8 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.summary && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Professional Summary</h2>
-              <p className="whitespace-pre-wrap text-on-surface-variant leading-loose">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-gray-900">Professional Summary</h2>
+              <p className="whitespace-pre-wrap text-gray-600 leading-loose">
                 {liveData.summary}
               </p>
             </div>
@@ -583,17 +583,17 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.experience && liveData.experience.length > 0 && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Experience</h2>
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-gray-900">Experience</h2>
               <div className="space-y-6">
                 {liveData.experience.map((exp: any, index: number) => (
                   <div key={index}>
-                    <div className="flex justify-between font-bold text-on-surface mb-1">
-                      <span className="text-sm">{exp.position} {exp.company && <span className="text-on-surface-variant font-normal">| {exp.company}</span>}</span>
-                      <span className="text-xs font-semibold text-on-surface-variant">{exp.startDate} {exp.startDate && exp.endDate && "-"} {exp.endDate}</span>
+                    <div className="flex justify-between font-bold text-gray-900 mb-1">
+                      <span className="text-sm">{exp.position} {exp.company && <span className="text-gray-600 font-normal">| {exp.company}</span>}</span>
+                      <span className="text-xs font-semibold text-gray-600">{exp.startDate} {exp.startDate && exp.endDate && "-"} {exp.endDate}</span>
                     </div>
                     {exp.description && (
                       <div 
-                        className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 prose-ul:pl-4 max-w-none text-on-surface-variant text-[13px] leading-loose"
+                        className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 prose-ul:pl-4 max-w-none text-gray-600 text-[13px] leading-loose"
                         dangerouslySetInnerHTML={{ __html: exp.description }}
                       />
                     )}
@@ -605,23 +605,23 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.projects && liveData.projects.length > 0 && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Projects</h2>
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-gray-900">Projects</h2>
               <div className="space-y-5">
                 {liveData.projects.map((proj: any, index: number) => (
                   <div key={index}>
-                    <div className="flex justify-between font-bold text-on-surface mb-1">
+                    <div className="flex justify-between font-bold text-gray-900 mb-1">
                       <span className="text-sm">{proj.title}</span>
-                      <div className="flex gap-2 font-semibold text-on-surface-variant text-xs">
-                        {proj.githubUrl && <a href={proj.githubUrl} className="hover:text-primary transition-colors" target="_blank">GitHub</a>}
+                      <div className="flex gap-2 font-semibold text-gray-600 text-xs">
+                        {proj.githubUrl && <a href={proj.githubUrl} className="hover:text-indigo-600 transition-colors" target="_blank">GitHub</a>}
                         {proj.githubUrl && proj.liveUrl && <span>|</span>}
-                        {proj.liveUrl && <a href={proj.liveUrl} className="hover:text-primary transition-colors" target="_blank">Live</a>}
+                        {proj.liveUrl && <a href={proj.liveUrl} className="hover:text-indigo-600 transition-colors" target="_blank">Live</a>}
                       </div>
                     </div>
                     {proj.techStack && (
-                      <div className="text-xs text-primary font-semibold mb-2">{proj.techStack}</div>
+                      <div className="text-xs text-indigo-600 font-semibold mb-2">{proj.techStack}</div>
                     )}
                     {proj.description && (
-                      <p className="whitespace-pre-wrap text-on-surface-variant leading-loose">
+                      <p className="whitespace-pre-wrap text-gray-600 leading-loose">
                         {proj.description}
                       </p>
                     )}
@@ -633,15 +633,15 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.education && liveData.education.length > 0 && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-on-surface">Education</h2>
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-4 text-gray-900">Education</h2>
               <div className="space-y-4">
                 {liveData.education.map((edu: any, index: number) => (
                   <div key={index} className="flex justify-between">
                     <div>
-                      <span className="font-bold text-on-surface text-sm">{edu.school}</span>
-                      {edu.degree && <span className="text-on-surface-variant text-sm">, {edu.degree}</span>}
+                      <span className="font-bold text-gray-900 text-sm">{edu.school}</span>
+                      {edu.degree && <span className="text-gray-600 text-sm">, {edu.degree}</span>}
                     </div>
-                    <span className="text-xs font-semibold text-on-surface-variant">{edu.startDate} {edu.startDate && edu.endDate && "-"} {edu.endDate}</span>
+                    <span className="text-xs font-semibold text-gray-600">{edu.startDate} {edu.startDate && edu.endDate && "-"} {edu.endDate}</span>
                   </div>
                 ))}
               </div>
@@ -650,8 +650,8 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.skills && liveData.skills.trim() && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Skills</h2>
-              <p className="leading-loose text-on-surface-variant">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-gray-900">Skills</h2>
+              <p className="leading-loose text-gray-600">
                 {liveData.skills}
               </p>
             </div>
@@ -659,8 +659,8 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
 
           {liveData?.certifications && liveData.certifications.trim() && (
             <div className="mb-6">
-              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-on-surface">Certifications</h2>
-              <p className="leading-loose text-on-surface-variant">
+              <h2 className="text-sm font-headline font-bold uppercase tracking-widest mb-3 text-gray-900">Certifications</h2>
+              <p className="leading-loose text-gray-600">
                 {liveData.certifications}
               </p>
             </div>
@@ -683,7 +683,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
             {atsScoreData ? (
               <div className="space-y-6 mt-6">
                 <div className="flex items-center gap-6 bg-primary/5 p-6 rounded-2xl border border-primary/20">
-                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center border-[6px] font-headline font-bold text-3xl shadow-sm"
+                  <div className="w-24 h-24 bg-surface-bright rounded-full flex items-center justify-center border-[6px] font-headline font-bold text-3xl shadow-sm"
                     style={{
                       borderColor: atsScoreData.atsScore >= 80 ? "#22c55e" : atsScoreData.atsScore >= 60 ? "#eab308" : "#ef4444",
                       color: atsScoreData.atsScore >= 80 ? "#16a34a" : atsScoreData.atsScore >= 60 ? "#ca8a04" : "#dc2626"
@@ -697,7 +697,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+                  <div className="bg-surface-bright p-5 rounded-2xl border border-outline-variant shadow-sm">
                     <h4 className="font-headline font-bold text-green-700 mb-4 flex items-center gap-2">
                       <div className="w-2.5 h-2.5 bg-green-500 rounded-full" /> Strengths
                     </h4>
@@ -707,7 +707,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                       ))}
                     </ul>
                   </div>
-                  <div className="bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+                  <div className="bg-surface-bright p-5 rounded-2xl border border-outline-variant shadow-sm">
                     <h4 className="font-headline font-bold text-orange-700 mb-4 flex items-center gap-2">
                       <div className="w-2.5 h-2.5 bg-orange-500 rounded-full" /> Needs Improvement
                     </h4>
@@ -719,7 +719,7 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
+                <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
                   <h4 className="font-headline font-bold text-primary mb-4 flex items-center gap-2">
                     <div className="w-2.5 h-2.5 bg-primary rounded-full" /> AI Recommendations
                   </h4>

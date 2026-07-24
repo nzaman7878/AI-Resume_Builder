@@ -129,7 +129,7 @@ export default function EducationStep({
 
         {/* Card */}
 
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8">
+        <div className="bg-surface-bright rounded-3xl border border-slate-200 shadow-sm p-8">
 
           <div className="flex items-center gap-4 mb-8">
             <div className="h-12 w-12 rounded-xl bg-violet-100 flex items-center justify-center">

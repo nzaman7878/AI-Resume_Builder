@@ -42,11 +42,39 @@
   --radius-2xl: 1.5rem;
 }
 
+@layer base {
+  .dark {
+    --color-primary: #a5b4fc;
+    --color-primary-container: #3730a3;
+    --color-on-primary: #ffffff;
+    
+    --color-surface: #0f172a;
+    --color-surface-dim: #020617;
+    --color-surface-bright: #1e293b;
+    
+    --color-on-surface: #f8fafc;
+    --color-on-surface-variant: #cbd5e1;
+    
+    --color-secondary: #94a3b8;
+    --color-secondary-container: #334155;
+    --color-on-secondary: #ffffff;
+    
+    --color-outline: #475569;
+    --color-outline-variant: #334155;
+
+    --color-background: #0f172a;
+  }
+}
+
 @layer utilities {
   .glass-panel {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  .dark .glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(51, 65, 85, 0.8);
   }
   .canvas-shadow {
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03);
@@ -66,6 +94,10 @@
 @media print {
   @page {
     margin: 0; /* This removes the header/footer URLs and dates */
+  }
+  html, body {
+    background-color: white !important;
+    color: black !important;
   }
   body {
     -webkit-print-color-adjust: exact;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -28,11 +29,13 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-on-surface font-body">
-        {/* We add print:hidden here so the navbar doesn't print on the PDF! */}
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
+      <body className="min-h-full flex flex-col bg-background text-on-surface font-body transition-colors duration-300">
+        <ThemeProvider>
+          {/* We add print:hidden here so the navbar doesn't print on the PDF! */}
+          <main className="flex-1 flex flex-col">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -107,7 +107,7 @@ export default function SkillsStep({ resumeId, onNext, onBack }: Props) {
 
         {/* Card */}
 
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+        <div className="bg-surface-bright rounded-3xl border border-slate-200 p-8 shadow-sm">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold">Skills</h1>

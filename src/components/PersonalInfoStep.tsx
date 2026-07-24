@@ -71,7 +71,7 @@ export default function PersonalInfoStep({ resumeId, onNext }: Props) {
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8">
+        <div className="bg-surface-bright rounded-3xl border border-slate-200 shadow-sm p-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-slate-800">
               Personal Information

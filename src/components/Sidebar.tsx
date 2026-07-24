@@ -21,7 +21,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-white/80 backdrop-blur-xl border-r border-outline-variant shadow-sm flex-col py-6 px-4 z-50">
+    <aside className="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-surface-bright/80 backdrop-blur-xl border-r border-outline-variant shadow-sm flex-col py-6 px-4 z-50">
       <div className="mb-12 px-2">
         <Link href="/" className="flex items-center gap-3 mb-1">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">

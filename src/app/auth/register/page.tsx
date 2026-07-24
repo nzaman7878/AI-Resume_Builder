@@ -65,7 +65,7 @@ export default function RegisterPage() {
                       type="text"
                       autoComplete="name"
                       {...register("name", { required: true })}
-                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-white outline-none transition-all"
+                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-surface-bright outline-none transition-all"
                       placeholder="Jane Doe"
                     />
                     {errors.name && <span className="text-error text-xs mt-1 block">Name is required</span>}
@@ -82,7 +82,7 @@ export default function RegisterPage() {
                       type="email"
                       autoComplete="email"
                       {...register("email", { required: true })}
-                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-white outline-none transition-all"
+                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-surface-bright outline-none transition-all"
                       placeholder="you@company.com"
                     />
                     {errors.email && <span className="text-error text-xs mt-1 block">Email is required</span>}
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                       type="password"
                       autoComplete="new-password"
                       {...register("password", { required: true, minLength: 6 })}
-                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-white outline-none transition-all"
+                      className="block w-full rounded-xl border-0 py-3 px-4 text-on-surface shadow-sm ring-1 ring-inset ring-outline-variant placeholder:text-outline focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm bg-surface-bright outline-none transition-all"
                       placeholder="••••••••"
                     />
                     {errors.password && <span className="text-error text-xs mt-1 block">Password must be at least 6 characters</span>}
@@ -137,7 +137,7 @@ export default function RegisterPage() {
         
         <div className="relative z-10 max-w-lg px-8 text-center">
           <div className="mb-8 flex justify-center">
-            <div className="bg-white/60 backdrop-blur-xl p-4 rounded-2xl shadow-xl border border-white inline-flex items-center justify-center">
+            <div className="bg-surface-bright/60 backdrop-blur-xl p-4 rounded-2xl shadow-xl border border-white inline-flex items-center justify-center">
               <Sparkles className="w-12 h-12 text-primary" />
             </div>
           </div>
