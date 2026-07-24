@@ -1,19 +1,49 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { IUser } from "@/types/user.types";
+import mongoose, { Document } from "mongoose";
+import bcrypt from "bcryptjs";
 
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password?: string; // Optional if you add Google OAuth later
+interface UserDocument extends Omit<IUser, "_id">, Document {
+  comparePass(candidatePassword: string): boolean;
 }
 
-const UserSchema: Schema = new Schema(
+let userSchema = new mongoose.Schema<UserDocument>(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    name: {
+      type: String,
+      trim: true,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Name is required"],
+      minlength: [6, "Min 6 characters required"],
+    },
+    mobile: {
+      type: String,
+      minlength: [10, "min 10 characters required"],
+      maxlength: [10, "max 10 characters required"],
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// This prevents Mongoose from recreating the model if it already exists
-export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+userSchema.pre("save", function (): void {
+  if (!this.isModified("password") || !this.password) return;
+  this.password = bcrypt.hashSync(this.password, 10);
+});
+
+userSchema.methods.comparePass = function (candidatePassword: string): boolean {
+  if (!this.password) return false;
+  return bcrypt.compareSync(candidatePassword, this.password);
+};
+
+const UserModel = mongoose.models.User || mongoose.model("User", userSchema);
+export default UserModel;
