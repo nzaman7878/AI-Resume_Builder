@@ -61,6 +61,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     if (!deletedResume) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json({ message: "Resume deleted" });
   } catch (error) {
+    console.error("DELETE resume error:", error);
     return NextResponse.json({ error: "Failed to delete resume" }, { status: 500 });
   }
 }
