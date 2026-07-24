@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,29 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
   
   const [atsScoreData, setAtsScoreData] = useState<any>(null);
   const [showAtsModal, setShowAtsModal] = useState(false);
+
+  const [scale, setScale] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const calculateScale = () => {
+      if (containerRef.current) {
+        // A4 width in pixels is ~794px at 96 DPI.
+        const A4_WIDTH_PX = 794;
+        // Padding is 32px on each side (p-8)
+        const containerWidth = containerRef.current.clientWidth - 64;
+        if (containerWidth < A4_WIDTH_PX) {
+          setScale(containerWidth / A4_WIDTH_PX);
+        } else {
+          setScale(1);
+        }
+      }
+    };
+    
+    calculateScale();
+    window.addEventListener("resize", calculateScale);
+    return () => window.removeEventListener("resize", calculateScale);
+  }, []);
 
   const { register, handleSubmit, reset, watch, setValue, control } = useForm<FormValues>({
     defaultValues: initialData
@@ -514,9 +537,13 @@ export default function ResumeEditorClient({ initialData, resumeId }: { initialD
       </div>
 
       {/* RIGHT COLUMN: THE LIVE PREVIEW */}
-      <div className="w-[45%] p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0">
+      <div ref={containerRef} className="w-[45%] p-8 overflow-y-auto bg-gray-200 flex justify-center print:w-full print:bg-white print:p-0">
         
-        <div id="resume-preview" className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:p-0 text-gray-800 text-[13px] leading-relaxed">
+        <div 
+          id="resume-preview" 
+          className="bg-white w-[210mm] min-h-[297mm] shadow-2xl p-10 print:shadow-none print:p-0 text-gray-800 text-[13px] leading-relaxed transition-transform duration-200"
+          style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
+        >
           
           <div className="border-b-[1.5px] border-gray-400 pb-4 mb-5 text-center">
             <h1 className="text-3xl font-serif tracking-wide text-gray-900">
